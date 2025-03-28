@@ -1,0 +1,6 @@
+assets
+.venv
+.vscode
+embedding_cache
+__pycache__
+experiments
