@@ -35,6 +35,7 @@ class Trainer:
         device="cuda",
         early_stopping_patience=3,
         moving_avg_window=3,
+        temperature=0.07,
     ):
         self.model = model
         self.train_dataloader = train_dataloader
@@ -43,6 +44,7 @@ class Trainer:
         self.margin = margin
         self.lr = lr
         self.weight_decay = weight_decay
+        self.temperature = temperature
         self.folder_name = folder_name
         self.device = device
 
@@ -90,8 +92,8 @@ class Trainer:
                 pos_embed = F.normalize(pos_embed, dim=-1)
                 neg_embed = F.normalize(neg_embed, dim=-1)
 
-                sim_pos = F.cosine_similarity(anchor_embed, pos_embed, dim=-1)
-                sim_neg = torch.matmul(neg_embed, anchor_embed.unsqueeze(-1)).squeeze(-1)
+                sim_pos = F.cosine_similarity(anchor_embed, pos_embed, dim=-1) / self.temperature
+                sim_neg = torch.matmul(neg_embed, anchor_embed.unsqueeze(-1)).squeeze(-1) / self.temperature
                 sim_pos_expanded = sim_pos.unsqueeze(1).expand_as(sim_neg)
 
                 loss = F.margin_ranking_loss(
@@ -199,8 +201,8 @@ class Trainer:
                 pos_embed = F.normalize(pos_embed, dim=-1)
                 neg_embed = F.normalize(neg_embed, dim=-1)
 
-                sim_pos = F.cosine_similarity(anchor_embed, pos_embed, dim=-1)
-                sim_neg = torch.matmul(neg_embed, anchor_embed.unsqueeze(-1)).squeeze(-1)
+                sim_pos = F.cosine_similarity(anchor_embed, pos_embed, dim=-1) / self.temperature
+                sim_neg = torch.matmul(neg_embed, anchor_embed.unsqueeze(-1)).squeeze(-1) / self.temperature
                 sim_pos_expanded = sim_pos.unsqueeze(1).expand_as(sim_neg)
 
                 loss = F.margin_ranking_loss(

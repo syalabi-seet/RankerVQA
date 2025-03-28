@@ -20,15 +20,16 @@ def main():
     parser.add_argument("--val_n_samples", type=int, default=500)
     parser.add_argument("--margin", type=float, default=0.2)
     parser.add_argument("--k_neg", type=int, default=10)
-    parser.add_argument("--batch_size", type=int, default=32)
+    parser.add_argument("--batch_size", type=int, default=16)
     parser.add_argument("--lr", type=float, default=1e-4)
     parser.add_argument("--weight_decay", type=float, default=1e-2)
+    parser.add_argument("--temperature", type=float, default=0.07)
     parser.add_argument("--lora_alpha", type=int, default=16)
     parser.add_argument("--lora_r", type=int, default=8)
     parser.add_argument("--hidden_dim", type=int, default=256)
     parser.add_argument("--proj_dim", type=int, default=128)
-    parser.add_argument("--dropout", type=float, default=0.1)
-    parser.add_argument("--proj_depth", type=int, default=2)
+    parser.add_argument("--dropout", type=float, default=0.3)
+    parser.add_argument("--proj_depth", type=int, default=1)
     parser.add_argument("--device", type=str, default="cuda")
     parser.add_argument(
         "--text_model_name", 
@@ -96,6 +97,7 @@ def main():
         margin=args.margin,
         lr=args.lr,
         weight_decay=args.weight_decay,
+        temperature=args.temperature,
         folder_name=folder_name,
         device=device
     )
